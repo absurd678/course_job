@@ -27,4 +27,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="stations.txt" />
+    <Text Include="buses.txt" />
+    <Text Include="routes.txt" />
+  </ItemGroup>
 </Project>

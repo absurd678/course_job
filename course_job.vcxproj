@@ -133,6 +133,11 @@
   <ItemGroup>
     <ClInclude Include="lists.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="buses.txt" />
+    <Text Include="routes.txt" />
+    <Text Include="stations.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
