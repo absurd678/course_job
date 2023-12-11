@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="buses.txt" />
+    <Text Include="drivers.txt" />
     <Text Include="routes.txt" />
     <Text Include="stations.txt" />
   </ItemGroup>

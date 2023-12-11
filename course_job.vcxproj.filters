@@ -31,5 +31,6 @@
     <Text Include="stations.txt" />
     <Text Include="buses.txt" />
     <Text Include="routes.txt" />
+    <Text Include="drivers.txt" />
   </ItemGroup>
 </Project>
