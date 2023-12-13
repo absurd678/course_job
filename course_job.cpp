@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "lists.cpp"
+#include "lists.h"
 using namespace std;
  // TODO: Проверки
  // Поиск
@@ -22,7 +22,9 @@ using namespace std;
 void create_stations(const char* fname, Station*& head, Station*& end); // Создание списка вокзалов
 void create_buses(const char* fname, Station* head); // Создание списков марок к каждому вокзалу
 void create_drivers(const char* fname, Driver*& head, Driver*& end); // Создание списка рейсов
-void create_routes(const char* fname, Route*& head, Route*& end); // Создание списка рейсов
+int create_routes(const char* fname, Route*& head, Route*& end); // Создание списка рейсов
+void print_table(Route* head); // Печать таблицы (проход по списку рейсов) TODO: А МОЖЕТ РЕЙСЫ И БУДУТ КОЛЬЦЕВЫМ СПИСКОМ?
+void PrintMess(int code); // Сообщение об ошибке
 
 const char* fstations = "stations.txt";
 const char* fbuses = "buses.txt";
@@ -41,13 +43,14 @@ int main()
     Route* route_end = NULL;
 
     create_stations(fstations, station_head, station_end);
+    printStation(station_head);
     create_buses(fbuses, station_head);
     create_drivers(fdrivers, driver_head, driver_end);
-    create_routes(froutes, route_head, route_end);
-
-    printStation(station_head);
     print_drivers(driver_head);
+    create_routes(froutes, route_head, route_end);
     print_routes(route_head);
+
+
 }
 
 void create_stations(const char* fname, Station*& head, Station*& end)
@@ -111,7 +114,12 @@ void create_buses(const char* fname, Station* head)
             if (id == ptr->id) break;
             ptr = ptr->next;
         } while (ptr != head);
-        makeBus(id, id_bus, name, ptr->busEnd, ptr->busHead); // Добавляем автобус в вокзал
+
+        Bus* bus_loc_head = ptr->busHead; Bus* bus_loc_end = ptr->busEnd;
+
+        makeBus(id, id_bus, name, bus_loc_end, bus_loc_head); // Добавляем автобус в вокзал
+         if (!ptr->busHead) ptr->busHead = bus_loc_head; // Добавление головы в поле
+        ptr->busEnd = bus_loc_end; // Изменение поля конца списка
 
     } // while
     fin.close();
@@ -158,77 +166,71 @@ void create_drivers(const char* fname, Driver*& head, Driver*& end) // Созд�
     fin.close();
 }
 
-void create_routes(const char* fname, Route*& head, Route*& end) // TODO: добить - см блок-схему (как считывать ФИО?)
+int create_routes(const char* fname, Route*& head, Route*& end)
 {
     ifstream fin(fname);
-    int id_station; // Айди вокзала
-    int id_bus; // Айди автобуса
-    int id_driver; // Айди водителя
-    int route_number; // Номер рейса
-    string time; // Время отправления
-    int tickets; // Количество проданных билетов
-    int passengers; // Количество пассажиров
-    string end_route; // Место назначения
-
+    
     while (!fin.eof())
     {
-        fin >> id_station;
+        Route* RouteLoc = new Route;
+        fin >> RouteLoc->id_station;
         if (fin.fail())
         {
             cout << "Некорректный id вокзала!" << endl;
-            continue;
+            return 0;
         } // if
         
-        fin >> id_bus;
+        fin >> RouteLoc->id_bus;
         if (fin.fail())
         {
             cout << "Некорректный id автобуса!" << endl;
-            continue;
+            return 1;
         } // if
         
-        fin >> id_driver;
+        fin >> RouteLoc->id_driver;
         if (fin.fail())
         {
             cout << "Некорректный id водителя!" << endl;
-            continue;
+            return 2;
         } // if
 
-        fin >> route_number;
+        fin >> RouteLoc->route_number;
         if (fin.fail())
         {
             cout << "Некорректный № рейса!" << endl;
-            continue;
+            return 3;
         } // if
 
-        fin >> time; // TODO: проверка формата
+        fin >> RouteLoc->time; // TODO: проверка формата
         if (fin.fail())
         {
             cout << "Некорректная запись времени!" << endl;
-            continue;
+            return 4;
         } // if
 
-        fin >> tickets;
+        fin >> RouteLoc->tickets;
         if (fin.fail())
         {
             cout << "Некорректное число билетов!" << endl;
-            continue;
+            return 5;
         } // if
 
-        fin >> passengers;
+        fin >> RouteLoc->passengers;
         if (fin.fail())
         {
             cout << "Некорректное число пассажиров!" << endl;
-            continue;
+            return 6;
         } // if
 
-        fin >> end_route;
+        fin >> RouteLoc->end_route;
         if (fin.fail())
         {
             cout << "Некорректный пункт назначения!" << endl;
-            continue;
+            return 7;
         } // if
 
-        make_route(id_station, id_bus, id_driver, route_number, time, tickets, passengers, end_route, end, head);
+        make_route(RouteLoc, end, head);
+
     } // while
     fin.close();
 }

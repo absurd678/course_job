@@ -23,8 +23,8 @@ struct Station // Двунаправленный кольцевой АВТОВОКЗАЛЫ
 
     int id; // ID
     string name; // Назв автовокзала
-    Bus* busHead; // Голова списка автобусов для данного вокзала
-    Bus* busEnd; // Хвост списка автобусов
+    Bus* busHead = NULL; // Голова списка автобусов для данного вокзала
+    Bus* busEnd = NULL; // Хвост списка автобусов
 };
 
 struct Driver // Водитель (линейный)
@@ -56,7 +56,7 @@ void DeleteStation(Station*& head, Station*& end, int index); // Удаление элемен
 void printStation(Station* head);  // Печать всего списка
 void printStationBack(Station* end); // В обратную сторону
 void delListStation(Station*& head, Station*& end); // Удаление списка
-//Station* findElemStation(float a, Station* head); // Найти элемент в списке
+Station* findElemStation(int id, Station* head); // Найти элемент по id
 //int count_sizeRDL(RingElem* head); // Посчитать длину списка
 
 // Функции кольцевого двухсвязного для АВТОБУСОВ
@@ -65,19 +65,19 @@ void DeleteBus(Bus*& head, Bus*& end, int index); // Удаление элемента по его ин
 void printBus(Bus* head);  // Печать всего списка
 void printBusBack(Bus* end); // В обратную сторону
 void delListBus(Bus*& head, Bus*& end); // Удаление списка
-//Bus* findElemBus(float a, Bus* head); // Найти элемент в списке
+Bus* findElemBus(int id, Bus* head); // Найти элемент в списке по id
 
 // Функции линейного ВОДИТЕЛЬ
 void make_driver(int id, string name, Driver*& end, Driver*& head); //  Добавление нового элемента
 void print_drivers(Driver* head);  // Печать всего списка
+Driver* find_driver(int id, Driver* head); // Найти элемент в списке по id
 //void del_drivers(Driver*& head); // Удаление списка
-//Route* find_driver(float a, Driver* head); // Найти элемент в списке TODO
 //void Insertion(float a, List* head, int index); // добавлений элемента
 //void Delete(List*& head, int index); // Удаление элемента по его индексу
 //int count_size(List* head); // Посчитать длину списка
 
 // Функции линейного РЕЙСЫ
-void make_route(int id_station, int id_bus, int id_driver, int route_number, string time, int tickets, int passengers, string end_route, Route*& end, Route*& head); //  Добавление нового элемента
+void make_route(Route* ptr, Route*& end, Route*& head); //  Добавление нового элемента
 void print_routes(Route* head);  // Печать всего списка
 //void del_routes(Route*& head); // Удаление списка
 //Route* find_route(float a, Route* head); // Найти элемент в списке TODO

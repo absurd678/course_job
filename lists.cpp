@@ -72,37 +72,49 @@ void printBus(Bus* head)  // Печать всего списка
     } // while
 } // printBus
 
-//void printBusBack(Bus* end) // В обратную сторону
-//{
-//    Bus* ptr = end;
-//    if (ptr) cout << ptr->id << " " << ptr->name << endl;
-//    else
-//    {
-//        cout << "Список пуст!" << endl;
-//        return;
-//    } // else
-//    ptr = ptr->prev;
-//    while (ptr != end)
-//    {
-//        cout << ptr->id << " " << ptr->name << endl;
-//        ptr = ptr->prev;
-//    } // while
-//} // printBusBack
+void printBusBack(Bus* end) // В обратную сторону
+{
+    Bus* ptr = end;
+    if (ptr) cout << ptr->id << " " << ptr->name << endl;
+    else
+    {
+        cout << "Список пуст!" << endl;
+        return;
+    } // else
+    ptr = ptr->prev;
+    while (ptr != end)
+    {
+        cout << ptr->id << " " << ptr->name << endl;
+        ptr = ptr->prev;
+    } // while
+} // printBusBack
 
-//void delListBus(Bus*& head, Bus*& end) // Удаление списка
-//{
-//    Bus* ptr = head;
-//    while (head != end)
-//    {
-//        ptr = head;
-//        ptr->prev->next = ptr->next; // Лево на право
-//        ptr->next->prev = ptr->prev;  // Право на лево
-//        head = ptr->next;
-//        delete ptr;
-//    }
-//    delete head; // Удаляем конец
-//    head = NULL; end = NULL;
-//} // delListBus
+void delListBus(Bus*& head, Bus*& end) // Удаление списка
+{
+    Bus* ptr = head;
+    while (head != end)
+    {
+        ptr = head;
+        ptr->prev->next = ptr->next; // Лево на право
+        ptr->next->prev = ptr->prev;  // Право на лево
+        head = ptr->next;
+        delete ptr;
+    }
+    delete head; // Удаляем конец
+    head = NULL; end = NULL;
+} // delListBus
+
+Bus* findElemStation(int id, Bus* head) // Найти элемент по id
+{
+    Bus* ptr = head;
+    do // Поиск по полю id
+    {
+        if (ptr->id == id) return ptr;
+        ptr = ptr->next;
+    } while (ptr != head);
+    return NULL;
+} // findElemStation
+
 //Bus* findElemBus(float a, Bus* head); // Найти элемент в списке
 
 // Функции двухсвязного списка для вокзалов
@@ -200,6 +212,17 @@ void delListStation(Station*& head, Station*& end) // Удаление списка
     head = NULL; end = NULL;
 } // delListRDL
 
+Station* findElemStation(int id, Station* head) // Найти элемент по id
+{
+    Station* ptr = head;
+    do // Поиск по полю id
+    {
+        if (ptr->id == id) return ptr;
+        ptr = ptr->next;
+    } while (ptr != head);
+    return NULL;
+} // findElemStation
+
 //Bus_Station* findElemRDL(float a, Bus_Station* head) // Найти элемент в списке
 //{
 //    Bus_Station* ptr = head;
@@ -233,17 +256,6 @@ void make_driver(int id, string name, Driver*& end, Driver*& head) //  Добавлени
     ptr->next = NULL; // Следующих элементов списка нет
 } // make
 
-//Route* findElem(float a, Route* head) // Найти элемент в списке
-//{
-//    Route* ptr = head;
-//    while (ptr)
-//    {
-//        if (ptr->data == a) return ptr;
-//        ptr = ptr->next;
-//    }
-//    return nullptr;
-//} // findElem
-
 void print_drivers(Driver* head)  // Печать всего списка
 {
     Driver* ptr = head;
@@ -255,6 +267,29 @@ void print_drivers(Driver* head)  // Печать всего списка
     }
     cout << endl;
 } // print
+
+Driver* find_driver(int id, Driver* head) // Найти элемент по id
+{
+    Driver* ptr = head;
+    while (ptr)
+    {
+        if (ptr->id == id) return ptr;
+        ptr = ptr->next;
+    }
+    return NULL;
+} // findElemStation
+
+//Route* findElem(float a, Route* head) // Найти элемент в списке
+//{
+//    Route* ptr = head;
+//    while (ptr)
+//    {
+//        if (ptr->data == a) return ptr;
+//        ptr = ptr->next;
+//    }
+//    return nullptr;
+//} // findElem
+
 
 //int count_size(Route* head) // Посчитать размер списка
 //{
@@ -297,21 +332,10 @@ void print_drivers(Driver* head)  // Печать всего списка
 //} // delList
 
 // Функции линейного РЕЙСЫ
-void make_route(int id_station, int id_bus, int id_driver, int route_number, string time, int tickets, int passengers, string end_route, Route*& end, Route*& head) //  Добавление нового элемента
+void make_route(Route* ptr, Route*& end, Route*& head) //  Добавление нового элемента
 {
-    Route* ptr = new Route; // Новый элемент
     if (!head) head = ptr; // Если это первый элемент
     else { end->next = ptr; } // У конца появилось продолжение
-
-    // Заполнение информ полей
-    ptr->id_station = id_station; // ID автовокзала
-    ptr->id_bus = id_bus; // ID автобуса
-    ptr->id_driver = id_driver; // ID водителя
-    ptr->route_number = route_number; // Номер рейса
-    ptr->time = time; // Время отправления
-    ptr->tickets = tickets; // Количество проданных билетов
-    ptr->passengers = passengers; // Количество пассажиров
-    ptr->end_route = end_route; // Место назначения
 
     end = ptr; // Делаем этот элемент последним
     ptr->next = NULL; // Следующих элементов списка нет
