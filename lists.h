@@ -57,6 +57,7 @@ void printStation(Station* head);  // Печать всего списка
 void printStationBack(Station* end); // В обратную сторону
 void delListStation(Station*& head, Station*& end); // Удаление списка
 Station* findElemStation(int id, Station* head); // Найти элемент по id
+Station* move_in_stations(Station* curr_pos, int step); // Перемещение в прямом и обратном направлениях
 //int count_sizeRDL(RingElem* head); // Посчитать длину списка
 
 // Функции кольцевого двухсвязного для АВТОБУСОВ
@@ -66,6 +67,7 @@ void printBus(Bus* head);  // Печать всего списка
 void printBusBack(Bus* end); // В обратную сторону
 void delListBus(Bus*& head, Bus*& end); // Удаление списка
 Bus* findElemBus(int id, Bus* head); // Найти элемент в списке по id
+Bus* move_in_buses(Bus* curr_pos, int step); // Перемещение в прямом и обратном направлениях
 
 // Функции линейного ВОДИТЕЛЬ
 void make_driver(int id, string name, Driver*& end, Driver*& head); //  Добавление нового элемента
@@ -80,7 +82,10 @@ void delete_driver(Driver*& head, Driver*& end, int id); // Удаление элемента по
 // Функции линейного РЕЙСЫ
 void make_route(Route* ptr, Route*& end, Route*& head); //  Добавление нового элемента
 void print_routes(Route* head);  // Печать всего списка
-Route* find_route(int route_number, Route* head); // Найти элемент в списке
+Route* find_route(int route_number, Route* head); // Найти элемент в списке по полю номера маршрута
+Route* find_route_stationID(int id_station, Route* head); // Найти элемент в списке по полю id вокзала
+Route* find_route_busID(int id_bus, Route* head); // Найти элемент в списке по полю id автобуса
+Route* find_route_driverID(int id_driver, Route* head); // Найти элемент в списке по полю id водителя
 void delete_route(Route*& head, Route*& end, int route_number); // Удаление элемента по номеру маршрута
 //void del_routes(Route*& head); // Удаление списка
 //void Insertion(float a, List* head, int index); // добавлений элемента

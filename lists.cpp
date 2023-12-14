@@ -60,7 +60,7 @@ void DeleteBus(Bus*& head, Bus*& end, int id) // Удаление элемента по его id
 void printBus(Bus* head)  // Печать всего списка
 {
     Bus* ptr = head;
-    if (ptr) cout << ptr->id << " " << ptr->name << endl;
+    if (ptr) cout <<ptr->id << " " << ptr->id_bus << " " << ptr->name << endl;
     else
     {
         cout << "Список пуст!" << endl;
@@ -69,7 +69,7 @@ void printBus(Bus* head)  // Печать всего списка
     ptr = ptr->next;
     while (ptr != head)
     {
-        cout << ptr->id << " " << ptr->name << endl;
+        cout << ptr->id << " " << ptr->id_bus << " " << ptr->name << endl;
         ptr = ptr->next;
     } // while
 } // printBus
@@ -109,6 +109,8 @@ void delListBus(Bus*& head, Bus*& end) // Удаление списка
 Bus* findElemBus(int id, Bus* head) // Найти элемент по id
 {
     Bus* ptr = head;
+    if (!ptr) return NULL; // Если список пуст - выходим
+
     do // Поиск по полю id
     {
         if (ptr->id_bus == id) return ptr;
@@ -116,6 +118,22 @@ Bus* findElemBus(int id, Bus* head) // Найти элемент по id
     } while (ptr != head);
     return NULL;
 } // findElemStation
+
+Bus* move_in_buses(Bus* curr_pos, int step) // Перемещение в прямом и обратном направлениях
+{
+    if (step >= 0) // Вперед
+    {
+        for (int counter = 0; counter < step; counter++)
+            curr_pos = curr_pos->next;
+    }
+    else // Шаг отрицательный => назад!
+    {
+        for (int counter = 0; counter < step * (-1); counter++)
+            curr_pos = curr_pos->prev;
+    } 
+    return curr_pos;
+}
+
 
 //Bus* findElemBus(float a, Bus* head); // Найти элемент в списке
 
@@ -227,6 +245,19 @@ Station* findElemStation(int id, Station* head) // Найти элемент по id
     return NULL;
 } // findElemStation
 
+Station* move_in_stations(Station* curr_pos, int step) // Перемещение в прямом и обратном направлениях
+{
+    if(step>=0) // Вперед
+    { 
+        for (int counter = 0; counter < step; counter++) 
+            curr_pos = curr_pos->next;
+    }
+    else // Шаг отрицательный => назад!
+        for (int counter = 0; counter < step*(-1); counter++) 
+            curr_pos = curr_pos->prev;
+    return curr_pos;
+}
+
 //Bus_Station* findElemRDL(float a, Bus_Station* head) // Найти элемент в списке
 //{
 //    Bus_Station* ptr = head;
@@ -290,6 +321,7 @@ void delete_driver(Driver*& head, Driver*& end, int id) { // Удаление элемента п
     {
         head = ptr->next;
         delete ptr;
+        return;
     } // if
     while(ptr->next->id != id) ptr = ptr->next; // Ищем предшественника удаляемого элемента
 
@@ -346,6 +378,7 @@ void make_route(Route* ptr, Route*& end, Route*& head) //  Добавление нового эле
     ptr->next = NULL; // Следующих элементов списка нет
 } // make
 
+// ПОИСК ПО РАЗНЫМ ПОЛЯМ
 Route* find_route(int route_number, Route* head) // Найти элемент по номеру маршрута
 {
     Route* ptr = head;
@@ -356,6 +389,36 @@ Route* find_route(int route_number, Route* head) // Найти элемент по номеру марш
     }
     return NULL;
 } // find_route
+Route* find_route_stationID(int id_station, Route* head) // Найти элемент в списке по полю id вокзала
+{
+    Route* ptr = head;
+    while (ptr)
+    {
+        if (ptr->id_station == id_station) return ptr;
+        ptr = ptr->next;
+    }
+    return NULL;
+}
+Route* find_route_busID(int id_bus, Route* head) // Найти элемент в списке по полю id автобуса
+{
+    Route* ptr = head;
+    while (ptr)
+    {
+        if (ptr->id_bus == id_bus) return ptr;
+        ptr = ptr->next;
+    }
+    return NULL;
+}
+Route* find_route_driverID(int id_driver, Route* head) // Найти элемент в списке по полю id водителя
+{
+    Route* ptr = head;
+    while (ptr)
+    {
+        if (ptr->id_driver == id_driver) return ptr;
+        ptr = ptr->next;
+    }
+    return NULL;
+}
 
 void print_routes(Route* head)  // Печать всего списка
 {
@@ -377,6 +440,7 @@ void delete_route(Route*& head, Route*& end, int route_number) { // Удаление эле
     {
         head = ptr->next;
         delete ptr;
+        return;
     } // if
     while (ptr->next->route_number != route_number) ptr = ptr->next; // Ищем предшественника удаляемого элемента
 
