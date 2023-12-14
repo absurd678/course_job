@@ -52,7 +52,7 @@ struct Route { // Линейный (рейсы)
 // Функции кольцевого двухсвязного для ВОКЗАЛОВ
 //int createRDL(List*& head, List*& end, const char* fileName); // Создание списка
 void makeStation(int id, string name, Station*& end, Station*& head); //  Добавление нового элемента
-void DeleteStation(Station*& head, Station*& end, int index); // Удаление элемента по его индексу
+void DeleteStation(Station*& head, Station*& end, int id); // Удаление элемента по его id
 void printStation(Station* head);  // Печать всего списка
 void printStationBack(Station* end); // В обратную сторону
 void delListStation(Station*& head, Station*& end); // Удаление списка
@@ -71,16 +71,18 @@ Bus* findElemBus(int id, Bus* head); // Найти элемент в списке по id
 void make_driver(int id, string name, Driver*& end, Driver*& head); //  Добавление нового элемента
 void print_drivers(Driver* head);  // Печать всего списка
 Driver* find_driver(int id, Driver* head); // Найти элемент в списке по id
+void delete_driver(Driver*& head, Driver*& end, int id); // Удаление элемента по его id
 //void del_drivers(Driver*& head); // Удаление списка
 //void Insertion(float a, List* head, int index); // добавлений элемента
-//void Delete(List*& head, int index); // Удаление элемента по его индексу
+
 //int count_size(List* head); // Посчитать длину списка
 
 // Функции линейного РЕЙСЫ
 void make_route(Route* ptr, Route*& end, Route*& head); //  Добавление нового элемента
 void print_routes(Route* head);  // Печать всего списка
+Route* find_route(int route_number, Route* head); // Найти элемент в списке
+void delete_route(Route*& head, Route*& end, int route_number); // Удаление элемента по номеру маршрута
 //void del_routes(Route*& head); // Удаление списка
-//Route* find_route(float a, Route* head); // Найти элемент в списке TODO
 //void Insertion(float a, List* head, int index); // добавлений элемента
 //void Delete(List*& head, int index); // Удаление элемента по его индексу
 //int count_size(List* head); // Посчитать длину списка

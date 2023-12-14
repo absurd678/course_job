@@ -28,31 +28,33 @@ void makeBus(int id, int id_bus, string name, Bus*& end, Bus*& head) //  Добавле
     head->prev = end;
 } // makeBus
 
-void DeleteBus(Bus*& head, Bus*& end, int index) // Удаление элемента по его индексу
+void DeleteBus(Bus*& head, Bus*& end, int id) // Удаление элемента по его id
 { // TODO: проверка индекса
     int counter = 0;
     Bus* ptr = head;
-    if (index == 0) // Удаляется голова
+    do
     {
-        ptr->prev->next = ptr->next; // Лево на право
-        ptr->next->prev = ptr->prev;  // Право на лево
-        head = ptr->next; // Голову на второй
-        delete ptr;
-        return;
-    }
-    ptr = ptr->next; counter++;
-    while (ptr != head)
-    {
-        if (index == counter)
+        if (id == ptr->id_bus)
         {
-            ptr->prev->next = ptr->next; // Лево на право
-            ptr->next->prev = ptr->prev;  // Право на лево
-            delete ptr;
-            return;
-        } // if
+            if (counter == 0) // Удаляется голова
+            {
+                ptr->prev->next = ptr->next; // Лево на право
+                ptr->next->prev = ptr->prev;  // Право на лево
+                head = ptr->next; // Голову на второй
+                delete ptr;
+                return;
+            }// if
+            else // Из промежутка или конца
+            {
+                ptr->prev->next = ptr->next; // Лево на право
+                ptr->next->prev = ptr->prev;  // Право на лево
+                delete ptr;
+                return;
+            } // if
+        }
         counter++;
         ptr = ptr->next;
-    } // while
+    } while (ptr != head);
 } // DeleteBus
 
 void printBus(Bus* head)  // Печать всего списка
@@ -104,12 +106,12 @@ void delListBus(Bus*& head, Bus*& end) // Удаление списка
     head = NULL; end = NULL;
 } // delListBus
 
-Bus* findElemStation(int id, Bus* head) // Найти элемент по id
+Bus* findElemBus(int id, Bus* head) // Найти элемент по id
 {
     Bus* ptr = head;
     do // Поиск по полю id
     {
-        if (ptr->id == id) return ptr;
+        if (ptr->id_bus == id) return ptr;
         ptr = ptr->next;
     } while (ptr != head);
     return NULL;
@@ -136,31 +138,33 @@ void makeStation(int id, string name, Station*& end, Station*& head) //  Добавле
     end->next = head;
     head->prev = end;
 }
-void DeleteStation(Station*& head, Station*& end, int index) // Удаление элемента по его индексу 
-{ // TODO: проверка индекса
+void DeleteStation(Station*& head, Station*& end, int id) // Удаление элемента по его id
+{ 
     int counter = 0;
     Station* ptr = head;
-    if (index == 0) // Удаляется голова
+    do
     {
-        ptr->prev->next = ptr->next; // Лево на право
-        ptr->next->prev = ptr->prev;  // Право на лево
-        head = ptr->next; // Голову на второй
-        delete ptr;
-        return;
-    }
-    ptr = ptr->next; counter++;
-    while (ptr != head)
-    {
-        if (index == counter)
+        if (id == ptr->id)
         {
-            ptr->prev->next = ptr->next; // Лево на право
-            ptr->next->prev = ptr->prev;  // Право на лево
-            delete ptr;
-            return;
-        } // if
+            if (counter == 0) // Удаляется голова
+            {
+                ptr->prev->next = ptr->next; // Лево на право
+                ptr->next->prev = ptr->prev;  // Право на лево
+                head = ptr->next; // Голову на второй
+                delete ptr;
+                return;
+            }// if
+            else // Из промежутка или конца
+            {
+                ptr->prev->next = ptr->next; // Лево на право
+                ptr->next->prev = ptr->prev;  // Право на лево
+                delete ptr;
+                return;
+            } // if
+        }
         counter++;
         ptr = ptr->next;
-    } // while
+    } while (ptr != head);
 } // DeleteStation
 
 void printStation(Station* head)  // Печать всего списка
@@ -279,6 +283,22 @@ Driver* find_driver(int id, Driver* head) // Найти элемент по id
     return NULL;
 } // findElemStation
 
+void delete_driver(Driver*& head, Driver*& end, int id) { // Удаление элемента по id
+    Driver* ptr = head;
+
+    if (ptr->id == id) // Удаление головы
+    {
+        head = ptr->next;
+        delete ptr;
+    } // if
+    while(ptr->next->id != id) ptr = ptr->next; // Ищем предшественника удаляемого элемента
+
+    Driver* ptr2 = ptr->next;
+    ptr->next = ptr->next->next;
+    if (ptr2 == end) end = ptr;
+    delete ptr2;
+} // delete_driver
+
 //Route* findElem(float a, Route* head) // Найти элемент в списке
 //{
 //    Route* ptr = head;
@@ -302,22 +322,7 @@ Driver* find_driver(int id, Driver* head) // Найти элемент по id
 //    return counter;
 //} // counter_size
 //
-//void Delete(Route*& head, int index) { // Удаление элемента по индексу
-//    Route* ptr = head;
-//    for (int i = 0; i < index - 1; i++) {
-//        ptr = ptr->next;
-//    } // for i
-//    if (ptr != head)
-//    {
-//        Route* ptr2 = ptr->next;
-//        ptr->next = ptr->next->next;
-//        delete ptr2;
-//    } // if
-//    else {
-//        head = ptr->next;
-//        delete ptr;
-//    } // else
-//} // Delete
+//
 //
 //void delList(Route*& head) // Удаление всего списка
 //{
@@ -341,16 +346,16 @@ void make_route(Route* ptr, Route*& end, Route*& head) //  Добавление нового эле
     ptr->next = NULL; // Следующих элементов списка нет
 } // make
 
-//Route* findElem(float a, Route* head) // Найти элемент в списке
-//{
-//    Route* ptr = head;
-//    while (ptr)
-//    {
-//        if (ptr->data == a) return ptr;
-//        ptr = ptr->next;
-//    }
-//    return nullptr;
-//} // findElem
+Route* find_route(int route_number, Route* head) // Найти элемент по номеру маршрута
+{
+    Route* ptr = head;
+    while (ptr)
+    {
+        if (ptr->route_number == route_number) return ptr;
+        ptr = ptr->next;
+    }
+    return NULL;
+} // find_route
 
 void print_routes(Route* head)  // Печать всего списка
 {
@@ -364,3 +369,19 @@ void print_routes(Route* head)  // Печать всего списка
     }
     cout << endl;
 } // print
+
+void delete_route(Route*& head, Route*& end, int route_number) { // Удаление элемента по номеру маршрута
+    Route* ptr = head;
+
+    if (ptr->route_number == route_number) // Удаление головы
+    {
+        head = ptr->next;
+        delete ptr;
+    } // if
+    while (ptr->next->route_number != route_number) ptr = ptr->next; // Ищем предшественника удаляемого элемента
+
+    Route* ptr2 = ptr->next;
+    ptr->next = ptr->next->next;
+    if (ptr2 == end) end = ptr;
+    delete ptr2;
+} // Delete
