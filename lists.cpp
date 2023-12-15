@@ -57,10 +57,10 @@ void DeleteBus(Bus*& head, Bus*& end, int id) // Удаление элемента по его id
     } while (ptr != head);
 } // DeleteBus
 
-void printBus(Bus* head)  // Печать всего списка
+void printBus(Bus* head, Station* s_head)  // Печать всего списка
 {
     Bus* ptr = head;
-    if (ptr) cout <<ptr->id << " " << ptr->id_bus << " " << ptr->name << endl;
+    if (ptr) cout <<" "<<findElemStation(ptr->id, s_head)->name << " " << ptr->name << endl;
     else
     {
         cout << "Список пуст!" << endl;
@@ -69,7 +69,7 @@ void printBus(Bus* head)  // Печать всего списка
     ptr = ptr->next;
     while (ptr != head)
     {
-        cout << ptr->id << " " << ptr->id_bus << " " << ptr->name << endl;
+        cout << " " << findElemStation(ptr->id, s_head)->name << " " << ptr->name << endl;
         ptr = ptr->next;
     } // while
 } // printBus
@@ -188,7 +188,7 @@ void DeleteStation(Station*& head, Station*& end, int id) // Удаление элемента п
 void printStation(Station* head)  // Печать всего списка
 {
     Station* ptr = head;
-    if (ptr) cout << ptr->id << " " << ptr->name << endl;
+    if (ptr) cout << ptr->name << endl;
     else
     {
         cout << "Список пуст!" << endl;
@@ -197,7 +197,7 @@ void printStation(Station* head)  // Печать всего списка
     ptr = ptr->next;
     while (ptr != head)
     {
-        cout << ptr->id << " " << ptr->name << endl;
+        cout <<" " << ptr->name << endl;
         ptr = ptr->next;
     } // while
 }
@@ -297,7 +297,7 @@ void print_drivers(Driver* head)  // Печать всего списка
     if (!ptr) cout << "Список пуст" << endl;
     while (ptr)
     {
-        cout << "\t" << ptr->id << " " << ptr->name << endl;  // Считывание данного
+        cout << " " << ptr->name << endl;  // Считывание данного
         ptr = ptr->next; // Переход к следующему
     }
     cout << endl;
@@ -420,13 +420,16 @@ Route* find_route_driverID(int id_driver, Route* head) // Найти элемент в списке
     return NULL;
 }
 
-void print_routes(Route* head)  // Печать всего списка
+void print_routes(Route* head, Station* s_head, Driver* d_head)  // Печать всего списка
 {
     Route* ptr = head;
+    Station* s_ptr; // Проход по вокзалам
     if (!ptr) cout << "Список пуст" << endl;
     while (ptr)
     {
-        cout << "\t" << ptr->id_station << " " << ptr->id_bus << " " << ptr->id_driver << " " << ptr->route_number << " " << ptr->time << " "
+        s_ptr = findElemStation(ptr->id_station, s_head);
+        cout << "\t" << s_ptr->name << " " << findElemBus(ptr->id_bus, s_ptr->busHead)->name << " " 
+            << find_driver(ptr->id_driver, d_head)->name << " " << ptr->route_number << " " << ptr->time << " "
             << ptr->tickets << " " << ptr->passengers << " " << ptr->end_route << endl;  // Считывание данного
         ptr = ptr->next; // Переход к следующему
     }

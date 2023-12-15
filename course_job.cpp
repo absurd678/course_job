@@ -10,11 +10,10 @@
 using namespace std;
 // Спросить:
  // TODO: 
- // Перемещение по спискам
  // Поиск по айди: функция поиска или вокзала или автобуса или водителя - как пользователь захочет
  // 
  // Поиск (по имени, а не только по айди)
- // Проверки
+ // Проверки (ищи TODO!)
  // Проверка на уникальность
 // соответствие автобусов в рейсе и в списке марок
 // тоже самое для автовокзалов с автобусами
@@ -30,20 +29,28 @@ void create_buses(const char* fname, Station* head); // Создание спи�
 void create_drivers(const char* fname, Driver*& head, Driver*& end); // Создание списка рейсов
 int create_routes(const char* fname, Route*& head, Route*& end); // Создание списка рейсов
 // ФУНКЦИИ ДОБАВЛЕНИЯ
+int switch_add(Station*& s_head, Station*& s_end, Driver*& d_head, Driver*& d_end, Route*& r_head, Route*& r_end);
 int add_stations(Station*& head, Station*& end);
 int add_buses(Station* head, int id_station);
 int add_drivers(Driver*& head, Driver*& end);
 int add_routes(Route*& head, Route*& end, Station* head_station, Driver* head_driver);
 // ФУНКЦИИ УДАЛЕНИЯ
+int switch_del(Station*& s_head, Station*& s_end, Driver*& d_head, Driver*& d_end, Route*& r_head, Route*& r_end);
 int del_station(Station*& head, Station*& end, Route*& route_head, Route*& route_end);
 int del_bus(Station* head, Route*& route_head, Route*& route_end);
 int del_driver(Driver*& head, Driver*& end, Route*& route_head, Route*& route_end);
 int del_route(Route*& head, Route*& end);
 // ФУНКЦИИ ПЕЧАТИ ТАБЛИЦЫ
-void print_table(Route* head_route, Station* head_station, Driver* head_driver); // Печать таблицы (проход по списку рейсов) TODO: А МОЖЕТ РЕЙСЫ И БУДУТ КОЛЬЦЕВЫМ СПИСКОМ?
+void print_table(Route* head_route, Station* head_station, Driver* head_driver); // Печать таблицы (проход по списку рейсов)
 // ФУНКЦИИ ПЕЧАТИ 
+void switch_print(Station*& s_head, Driver*& d_head, Route*& r_head);
+
+// ФУНКЦИИ ПОИСКА
+// Поиск по полю -> вывод в виде таблицы
+int switch_search();
 
 // ФУНКЦИИ ПЕРЕМЕЩЕНИЯ В ПРЯМОМ И ОБРАТНОМ НАПРАВЛЕНИЯХ 
+int switch_move(Station* s_head, Station*& curr_station, Bus*& curr_bus);
 
 
 // ОСТАЛЬНЫЕ ФУНКЦИИ
@@ -79,11 +86,8 @@ int main()
     Driver* driver_end = NULL;
     Route* route_head = NULL;
     Route* route_end = NULL;
-    Station* station_ptr = NULL; // Для прохода по вокзалам
     Station* curr_station = NULL; // Для перемещения в прямом и обратном направлениях (вокзал)
     Bus* curr_bus = NULL; // Для перемещения в прямом и обратном направлениях (автобус)
-    int step = 0; // Шаг для прохода
-    int id_station = 0; // id вокзала, выбираемое пользователем
 
     // Создание БД, с которой собираемся работать
     create_stations(fstations, station_head, station_end); 
@@ -112,125 +116,40 @@ int main()
 
 
         case 0: // Выход
+
             is_finished = 1;
             break;
-
 
         case 1:
             
             cout << "Выберете элемент, который нужно добавить: \n1. Вокзал\n2. Автобус\n 3. Водителя\n4. Маршрут\n"; 
             cin >> loc_choice;
-            switch (loc_choice)
-            {
-            case 1:
-                add_stations(station_head, station_end);
-                break;
-            case 2:
-                cout << "Введите id станции, в которую вы хотите добавить автобус: "; cin >> id_station;
-                add_buses(station_head, id_station);
-                break;
-            case 3:
-                add_drivers(driver_head, driver_end);
-                break;
-            case 4:
-                add_routes(route_head, route_end, station_head, driver_head);
-                break;
-            default:
-                cout << "Введено некорректное значение!";
-                break;
-            } // switch 1
+            code = switch_add(station_head, station_end, driver_head, driver_end, route_head, route_end);
+            if (code) return 666; // PrintMess
             break;
 
         case 2:
+
             cout << "Выберете элемент, который нужно удалить: \n1. Вокзал\n2. Автобус\n 3. Водителя\n4. Маршрут\n";
             cin >> loc_choice;
-            switch (loc_choice)
-            {
-            case 1:
-                del_station(station_head, station_end, route_head, route_end);
-                break;
-            case 2:
-                
-                del_bus(station_head, route_head, route_end);
-                break;
-            case 3:
-                del_driver(driver_head, driver_end, route_head, route_end);
-                break;
-            case 4:
-                del_route(route_head, route_end);
-                break;
-            default:
-                cout << "Введено некорректное значение!";
-                break;
-            } // switch 2
+            code = switch_del(station_head, station_end, driver_head, driver_end, route_head, route_end);
+            if (code) return 666; // PrintMess
             break;
 
         case 4:
             cout << "Выберете список, который нужно распечатать: \n1. Вокзалов\n2. Автобусов\n 3. Водителей\n4. Маршрутов\n5. Все вышеперечисленное\n";
             cin >> loc_choice;
-            switch (loc_choice)
-            {
-            case 1: // Вокзалов
-                printStation(station_head);
-                break;
-            case 2: // Автобусов
-                station_ptr = station_head;
-                do // Проход по всем вокзалам
-                {
-                    printBus(station_ptr->busHead);
-                    station_ptr = station_ptr->next;
-                } while (station_ptr != station_head);
-                break;
-            case 3: // Водителей
-                print_drivers(driver_head);
-                break;
-            case 4: // Маршрутов
-                print_routes(route_head);
-                break;
-            case 5: // Все вышеперечисленное
-                printStation(station_head);
-                station_ptr = station_head;
-                do // Проход по всем вокзалам
-                {
-                    printBus(station_ptr->busHead);
-                } while (station_ptr != station_head);
-                print_drivers(driver_head);
-                print_routes(route_head);
-                break;
-            default:
-                cout << "Введено некорректное значение!";
-                break;
-            } // switch 4
+            switch_print(station_head, driver_head, route_head);
             break;
 
         case 5:
             print_table(route_head, station_head, driver_head);
             break;
-        case 6:
+        case 6: // TODO Проверка на случай, если в вокзале вообще нет автобусов
             cout << "Выберете список, по которому нужно пройти: \n1. Вокзалов\n2. Автобусов\n>>";
             cin >> loc_choice;
-            cout << "\nНа сколько нужно шагнуть? (Пример: 2 - на два элемента вперед, -2 - на два элемента назад)";
-            cin >> step;
-            switch (loc_choice)
-            {
-            case 1:
-                cout << "Текущая позиция: " << curr_station->id << " " << curr_station->name << endl;
-                curr_station = move_in_stations(curr_station, step);
-                cout << "Измененная позиция: " << curr_station->id << " " << curr_station->name << endl;
-                break;
-            case 2:
-                cout << "Введите id вокзала, по автобусам которого нужно перемещаться: "; cin >> id_station;
-                // Проверка id
-                if (cin.fail()) return 1;
-                else if (!findElemStation(id_station, station_head)) return 4; 
-                // Если мы не продолжаем движение по тому же списку автобусов, что и в прошлый раз, то стартуем от начала другого выбранного списка
-                if (id_station != curr_bus->id) curr_bus = findElemStation(id_station, station_head)->busHead;
-                curr_bus = move_in_buses(curr_bus, step);
-                break;
-            default:
-                cout << "Некорректное значение!"<<endl;
-                break;
-            } // switch 6
+            code = switch_move(station_head, curr_station, curr_bus);
+            if (code) return 666; // PrintMess
             break;
 
         } // switch global
@@ -431,6 +350,32 @@ int create_routes(const char* fname, Route*& head, Route*& end)
 
 //------Добавление элементов------//
 
+int switch_add(Station*& s_head, Station*& s_end, Driver*& d_head, Driver*& d_end, Route*& r_head, Route*& r_end)
+{
+    int id_station; // id вокзала, выбираемого пользователем
+    int mistake_code = 0; // Код ошибки
+    switch (::loc_choice) // ГЛОБАЛЬНАЯ ПЕРЕМЕННАЯ
+    {
+    case 1:
+        mistake_code = add_stations(s_head, s_end);
+        break;
+    case 2:
+        cout << "Введите id станции, в которую вы хотите добавить автобус: "; cin >> id_station;
+        mistake_code = add_buses(s_head, id_station);
+        break;
+    case 3:
+        mistake_code = add_drivers(d_head, d_end);
+        break;
+    case 4:
+        mistake_code = add_routes(r_head, r_end, s_head, d_head);
+        break;
+    default:
+        cout << "Введено некорректное значение!";
+        break;
+    } // switch
+    return mistake_code;
+} // switch_add
+
 int add_stations(Station*& head, Station*& end)
 {
     int id; 
@@ -538,6 +483,31 @@ int add_routes(Route*& head, Route*& end, Station* head_station, Driver* head_dr
 
 //------Удаление элементов------//
 
+int switch_del(Station*& s_head, Station*& s_end, Driver*& d_head, Driver*& d_end, Route*& r_head, Route*& r_end)
+{
+    int mistake_code = 0;
+    switch (::loc_choice)
+    {
+    case 1:
+        mistake_code = del_station(s_head, s_end, r_head, r_end);
+        break;
+    case 2:
+
+        mistake_code = del_bus(s_head, r_head, r_end);
+        break;
+    case 3:
+        mistake_code = del_driver(d_head, d_end, r_head, r_end);
+        break;
+    case 4:
+        mistake_code = del_route(r_head, r_end);
+        break;
+    default:
+        cout << "Введено некорректное значение!";
+        break;
+    } // switch
+    return mistake_code;
+} // switch_del
+
 int del_station(Station*& head, Station*& end, Route*& route_head, Route*& route_end)
 {
     int id; 
@@ -621,6 +591,56 @@ int del_route(Route*& head, Route*& end)
     return 0;
 }
 
+
+//------Печать списков------//
+void switch_print(Station*& s_head, Driver*& d_head, Route*& r_head)
+{
+    Station* station_ptr = NULL; // указатель для прохода по вокзалам
+
+    switch (::loc_choice)
+    {
+    case 1: // Вокзалов
+        cout << "\nСПИСОК ВОКЗАЛОВ: " << endl;
+        printStation(s_head);
+        break;
+    case 2: // Автобусов
+        cout << "\nСПИСОК АВТОБУСОВ: " << endl;
+        station_ptr = s_head;
+        do // Проход по всем вокзалам
+        {
+            printBus(station_ptr->busHead, s_head);
+            station_ptr = station_ptr->next;
+        } while (station_ptr != s_head);
+        break;
+    case 3: // Водителей
+        cout << "\nСПИСОК ВОДИТЕЛЕЙ: " << endl;
+        print_drivers(d_head);
+        break;
+    case 4: // Маршрутов
+        cout << "\nСПИСОК МАРШРУТОВ: " << endl;
+        print_routes(r_head, s_head, d_head);
+        break;
+    case 5: // Все вышеперечисленное
+        cout << "\nСПИСОК ВОКЗАЛОВ: " << endl;
+        printStation(s_head);
+        station_ptr = s_head;
+        cout << "\nСПИСОК АВТОБУСОВ: " << endl;
+        do // Проход по всем вокзалам
+        {
+            printBus(station_ptr->busHead, s_head);
+        } while (station_ptr != s_head);
+        cout << "\nСПИСОК ВОДИТЕЛЕЙ: " << endl;
+        print_drivers(d_head);
+        cout << "\nСПИСОК МАРШРУТОВ: " << endl;
+        print_routes(r_head, s_head, d_head);
+        break;
+    default:
+        cout << "Введено некорректное значение!"<<endl;
+        break;
+    } // switch 4
+}
+
+
 //------Таблица------//
 
 void print_table(Route* head_route, Station* head_station, Driver* head_driver)
@@ -664,3 +684,38 @@ void print_table(Route* head_route, Station* head_station, Driver* head_driver)
     // Подчеркиваем
     cout << '|' << setfill('_') << setw(table_col * 8) << '|' << endl;
 }
+
+
+//------Перемещение------//
+int switch_move(Station* s_head, Station*& curr_station, Bus*& curr_bus)
+{
+    int step = 0; // Шаг
+    int id_station; // id вокзала
+    cout << "\nНа сколько нужно шагнуть? (Пример: 2 - на два элемента вперед, -2 - на два элемента назад)";
+    cin >> step;
+    switch (loc_choice)
+    {
+    case 1:
+        cout << "Текущая позиция: " << curr_station->id << " " << curr_station->name << endl;
+        curr_station = move_in_stations(curr_station, step);
+        cout << "Измененная позиция: " << curr_station->id << " " << curr_station->name << endl;
+        break;
+    case 2:
+        cout << "Введите id вокзала, по автобусам которого нужно перемещаться: "; cin >> id_station;
+        // Проверка id
+        if (cin.fail()) return 1;
+        else if (!findElemStation(id_station, s_head)) return 4;
+        // Если стартовать неоткуда; иначе Если мы не продолжаем движение по тому же списку автобусов, что и в прошлый раз, то стартуем от начала другого выбранного списка 
+        if (!curr_bus) curr_bus = findElemStation(id_station, s_head)->busHead;
+        else if (id_station != curr_bus->id) curr_bus = findElemStation(id_station, s_head)->busHead;
+
+        cout << "Текущая позиция: " << curr_bus->id_bus << " " << curr_bus->name << endl;
+        curr_bus = move_in_buses(curr_bus, step);
+        cout << "Измененная позиция: " << curr_bus->id_bus << " " << curr_bus->name << endl;
+        break;
+    default:
+        cout << "Некорректное значение!" << endl;
+        break;
+    } // switch
+    return 0;
+} // switch_move

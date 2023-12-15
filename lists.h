@@ -63,7 +63,7 @@ Station* move_in_stations(Station* curr_pos, int step); // Перемещение в прямом 
 // Функции кольцевого двухсвязного для АВТОБУСОВ
 void makeBus(int id, int id_bus, string name, Bus*& end, Bus*& head); //  Добавление нового элемента
 void DeleteBus(Bus*& head, Bus*& end, int index); // Удаление элемента по его индексу
-void printBus(Bus* head);  // Печать всего списка
+void printBus(Bus* head, Station* s_head);  // Печать всего списка
 void printBusBack(Bus* end); // В обратную сторону
 void delListBus(Bus*& head, Bus*& end); // Удаление списка
 Bus* findElemBus(int id, Bus* head); // Найти элемент в списке по id
@@ -81,7 +81,7 @@ void delete_driver(Driver*& head, Driver*& end, int id); // Удаление элемента по
 
 // Функции линейного РЕЙСЫ
 void make_route(Route* ptr, Route*& end, Route*& head); //  Добавление нового элемента
-void print_routes(Route* head);  // Печать всего списка
+void print_routes(Route* head, Station* s_head, Driver* d_head);  // Печать всего списка
 Route* find_route(int route_number, Route* head); // Найти элемент в списке по полю номера маршрута
 Route* find_route_stationID(int id_station, Route* head); // Найти элемент в списке по полю id вокзала
 Route* find_route_busID(int id_bus, Route* head); // Найти элемент в списке по полю id автобуса
