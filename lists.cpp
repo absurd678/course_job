@@ -28,6 +28,17 @@ void makeBus(int id, int id_bus, string name, Bus*& end, Bus*& head) //  Добавле
     head->prev = end;
 } // makeBus
 
+int max_bus_id(Bus* head) // Найти макс id
+{
+    Bus* ptr = head;
+    int max_id = 0;
+    do {
+        if (max_id < ptr->id_bus) max_id = ptr->id_bus;
+        ptr = ptr->next;
+    } while (ptr != head);
+    return max_id;
+}
+
 void DeleteBus(Bus*& head, Bus*& end, int id) // Удаление элемента по его id
 { // TODO: проверка индекса
     int counter = 0;
@@ -119,6 +130,19 @@ Bus* findElemBus(int id, Bus* head) // Найти элемент по id
     return NULL;
 } // findElemStation
 
+int find_id_bus(string name, Bus* head) // Найти id по названию
+{
+    Bus* ptr = head;
+    if (!ptr) return -1; // Если список пуст - выходим
+
+    do // Поиск по полю id
+    {
+        if (ptr->name == name) return ptr->id_bus;
+        ptr = ptr->next;
+    } while (ptr != head);
+    return -1;
+}
+
 Bus* move_in_buses(Bus* curr_pos, int step) // Перемещение в прямом и обратном направлениях
 {
     if (step >= 0) // Вперед
@@ -156,6 +180,18 @@ void makeStation(int id, string name, Station*& end, Station*& head) //  Добавле
     end->next = head;
     head->prev = end;
 }
+
+int max_station_id(Station* head) // Найти макс id
+{
+    Station* ptr = head;
+    int max_id = 0;
+    do {
+        if (max_id < ptr->id) max_id = ptr->id;
+        ptr = ptr->next;
+    } while (ptr != head);
+    return max_id;
+}
+
 void DeleteStation(Station*& head, Station*& end, int id) // Удаление элемента по его id
 { 
     int counter = 0;
@@ -245,6 +281,17 @@ Station* findElemStation(int id, Station* head) // Найти элемент по id
     return NULL;
 } // findElemStation
 
+int find_id_station(string name, Station* head)
+{
+    Station* ptr = head;
+    do // Поиск по полю id
+    {
+        if (ptr->name == name) return ptr->id;
+        ptr = ptr->next;
+    } while (ptr != head);
+    return NULL;
+} // find_id_station
+
 Station* move_in_stations(Station* curr_pos, int step) // Перемещение в прямом и обратном направлениях
 {
     if(step>=0) // Вперед
@@ -291,6 +338,18 @@ void make_driver(int id, string name, Driver*& end, Driver*& head) //  Добавлени
     ptr->next = NULL; // Следующих элементов списка нет
 } // make
 
+int max_driver_id(Driver* head) // Найти макс id
+{
+    Driver* ptr = head;
+    int max_id = 0;
+    while(ptr)
+    {
+        if (max_id < ptr->id) max_id = ptr->id;
+        ptr = ptr->next;
+    } 
+    return max_id;
+}
+
 void print_drivers(Driver* head)  // Печать всего списка
 {
     Driver* ptr = head;
@@ -314,6 +373,17 @@ Driver* find_driver(int id, Driver* head) // Найти элемент по id
     return NULL;
 } // findElemStation
 
+int find_id_driver(string name, Driver* head) // Найти id по названию
+{
+    Driver* ptr = head;
+    while (ptr)
+    {
+        if (ptr->name == name) return ptr->id;
+        ptr = ptr->next;
+    }
+    return NULL;
+}
+
 void delete_driver(Driver*& head, Driver*& end, int id) { // Удаление элемента по id
     Driver* ptr = head;
 
@@ -331,42 +401,17 @@ void delete_driver(Driver*& head, Driver*& end, int id) { // Удаление элемента п
     delete ptr2;
 } // delete_driver
 
-//Route* findElem(float a, Route* head) // Найти элемент в списке
-//{
-//    Route* ptr = head;
-//    while (ptr)
-//    {
-//        if (ptr->data == a) return ptr;
-//        ptr = ptr->next;
-//    }
-//    return nullptr;
-//} // findElem
-
-
-//int count_size(Route* head) // Посчитать размер списка
-//{
-//    int counter = 0;
-//    while (head)
-//    {
-//        counter++;
-//        head = head->next;
-//    } // while
-//    return counter;
-//} // counter_size
-//
-//
-//
-//void delList(Route*& head) // Удаление всего списка
-//{
-//    Route* ptr;
-//    while (head) // Удаление, начинающееся с "головы"
-//    {
-//        ptr = head->next;
-//        delete head;
-//        head = ptr;
-//    } // while
-//    head = NULL;
-//} // delList
+void del_drivers(Driver*& head) // Удаление всего списка
+{
+    Driver* ptr;
+    while (head) // Удаление, начинающееся с "головы"
+    {
+        ptr = head->next;
+        delete head;
+        head = ptr;
+    } // while
+    head = NULL;
+} // delList
 
 // Функции линейного РЕЙСЫ
 void make_route(Route* ptr, Route*& end, Route*& head) //  Добавление нового элемента
@@ -379,16 +424,7 @@ void make_route(Route* ptr, Route*& end, Route*& head) //  Добавление нового эле
 } // make
 
 // ПОИСК ПО РАЗНЫМ ПОЛЯМ
-Route* find_route(int route_number, Route* head) // Найти элемент по номеру маршрута
-{
-    Route* ptr = head;
-    while (ptr)
-    {
-        if (ptr->route_number == route_number) return ptr;
-        ptr = ptr->next;
-    }
-    return NULL;
-} // find_route
+
 Route* find_route_stationID(int id_station, Route* head) // Найти элемент в списке по полю id вокзала
 {
     Route* ptr = head;
@@ -399,9 +435,11 @@ Route* find_route_stationID(int id_station, Route* head) // Найти элемент в спис
     }
     return NULL;
 }
+
 Route* find_route_busID(int id_bus, Route* head) // Найти элемент в списке по полю id автобуса
 {
     Route* ptr = head;
+    if (id_bus == -1) return NULL;
     while (ptr)
     {
         if (ptr->id_bus == id_bus) return ptr;
@@ -409,6 +447,7 @@ Route* find_route_busID(int id_bus, Route* head) // Найти элемент в списке по по
     }
     return NULL;
 }
+
 Route* find_route_driverID(int id_driver, Route* head) // Найти элемент в списке по полю id водителя
 {
     Route* ptr = head;
@@ -420,6 +459,62 @@ Route* find_route_driverID(int id_driver, Route* head) // Найти элемент в списке
     return NULL;
 }
 
+Route* find_route_number(int route_number, Route* head) // Найти элемент по номеру маршрута
+{
+    Route* ptr = head;
+    while (ptr)
+    {
+        if (ptr->route_number == route_number) return ptr;
+        ptr = ptr->next;
+    }
+    return NULL;
+} // find_route_number
+
+Route* find_route_time_dep(string time_dep, Route* head) // По времени
+{
+    Route* ptr = head;
+    while (ptr)
+    {
+        if (ptr->time == time_dep) return ptr;
+        ptr = ptr->next;
+    }
+    return NULL;
+}
+
+Route* find_route_tickets(int tickets, Route* head) // По билетам
+{
+    Route* ptr = head;
+    while (ptr)
+    {
+        if (ptr->tickets == tickets) return ptr;
+        ptr = ptr->next;
+    }
+    return NULL;
+}
+
+Route* find_route_pass(int passengers, Route* head) // По пассажирам
+{
+    Route* ptr = head;
+    while (ptr)
+    {
+        if (ptr->passengers == passengers) return ptr;
+        ptr = ptr->next;
+    }
+    return NULL;
+}
+
+Route* find_route_end(string end_route, Route* head) // По пункту
+{
+    Route* ptr = head;
+    while (ptr)
+    {
+        if (ptr->end_route == end_route) return ptr;
+        ptr = ptr->next;
+    }
+    return NULL;
+}
+
+// ПЕЧАТЬ
 void print_routes(Route* head, Station* s_head, Driver* d_head)  // Печать всего списка
 {
     Route* ptr = head;
@@ -436,6 +531,7 @@ void print_routes(Route* head, Station* s_head, Driver* d_head)  // Печать всего
     cout << endl;
 } // print
 
+// УДАЛЕНИЕ
 void delete_route(Route*& head, Route*& end, int route_number) { // Удаление элемента по номеру маршрута
     Route* ptr = head;
 
@@ -452,3 +548,15 @@ void delete_route(Route*& head, Route*& end, int route_number) { // Удаление эле
     if (ptr2 == end) end = ptr;
     delete ptr2;
 } // Delete
+
+void del_routes(Route*& head) // Удаление всего списка
+{
+    Route* ptr;
+    while (head) // Удаление, начинающееся с "головы"
+    {
+        ptr = head->next;
+        delete head;
+        head = ptr;
+    } // while
+    head = NULL;
+} // delList
