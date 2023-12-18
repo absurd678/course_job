@@ -305,24 +305,6 @@ Station* move_in_stations(Station* curr_pos, int step) // Перемещение в прямом и
     return curr_pos;
 }
 
-//Bus_Station* findElemRDL(float a, Bus_Station* head) // Найти элемент в списке
-//{
-//    Bus_Station* ptr = head;
-//    if (a == ptr->data) return ptr; // Если голова - искомое
-//    ptr = ptr->next;
-//    while (ptr != head)
-//    {
-//        if (a == ptr->data) return ptr;
-//        ptr = ptr->next;
-//    } // while
-//    cout << "Элемент " << a << " не найден" << endl;
-//    return nullptr;
-//}
-//int count_sizeRDL(RingElem* head)
-//{
-//
-//}
-
 // Функции линейного ВОДИТЕЛЬ
 void make_driver(int id, string name, Driver*& end, Driver*& head) //  Добавление нового элемента
 {

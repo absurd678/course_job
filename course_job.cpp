@@ -1,5 +1,16 @@
-﻿// course_job.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+﻿/***********************************************************************************
+*                         Программирование                                         *
+************************************************************************************
+*Project type :Win64 Console Application                                           *
+*Project name :course_job.sln                                                      *
+*File name    :course_job.cpp                                                      *
+*Language     :CPP, MSVS 2022                                                      *
+*Programmers  :Кожевников Артем Вадимович,  М3О-209Б-22                            *
+*Modified By  :                                                                    *
+*Created      :06.12.2023                                                          *
+*Last revision:18.12.2023                                                          *
+*Comment      :                                                                    *
+***********************************************************************************/
 
 #include <iostream>
 #include <fstream>
@@ -8,17 +19,22 @@
 #include <math.h>
 #include "lists.h"
 using namespace std;
+// TO ASK:
+// Поиск норм?
+// Проверки
+// 5-ти блок-схем достаточно?
+// 
 // 
  // TODO: 
  // 
- // Проверки (ищи TODO!)
  // Проверка на уникальность
-// соответствие автобусов в рейсе и в списке марок
-// тоже самое для автовокзалов с автобусами
-// поля целых чисел, даты
 // Замечания:
 // Внутри одного и того же вокзала все автобусы имеют разные названия
 // Абсолютно у всех автобусов должны быть разные id
+// 
+// формат времени
+// соответствие автобусов в рейсе и в списке марок
+// тоже самое для автовокзалов с автобусами
 
 
 /*********************************************************************
@@ -128,7 +144,11 @@ int main()
             cout << "Выберете элемент, который нужно добавить: \n1. Вокзал\n2. Автобус\n 3. Водителя\n4. Маршрут\n"; 
             cin >> loc_choice;
             code = switch_add(station_head, station_end, driver_head, driver_end, route_head, route_end);
-            if (code) return 666; // PrintMess
+            if (code) // Ошибка
+            {
+                PrintMess(code);
+                is_finished = 1;
+            }
             break;
 
         case 2:
@@ -136,13 +156,21 @@ int main()
             cout << "Выберете элемент, который нужно удалить: \n1. Вокзал\n2. Автобус\n 3. Водителя\n4. Маршрут\n";
             cin >> loc_choice;
             code = switch_del(station_head, station_end, driver_head, driver_end, route_head, route_end);
-            if (code) return 666; // PrintMess
+            if (code) // Ошибка
+            {
+                PrintMess(code);
+                is_finished = 1;
+            }
             break;
         case 3:
             cout << "Выберете элемент, по которому поставить фильтр: \n1. Вокзал\n2. Автобус\n3. Водитель\n4. Номер маршрута\n5. Время отправления\n6. Количество билетов\n7. Количество пассажиров\n8. Пункт назначения\n";
             cin >> loc_choice;
             code = switch_search(route_head, station_head, driver_head);
-            if (code) return 666; // PrintMess
+            if (code) // Ошибка
+            {
+                PrintMess(code);
+                is_finished = 1;
+            }
             break;
         case 4:
             cout << "Выберете список, который нужно распечатать: \n1. Вокзалов\n2. Автобусов\n 3. Водителей\n4. Маршрутов\n5. Все вышеперечисленное\n";
@@ -157,7 +185,11 @@ int main()
             cout << "Выберете список, по которому нужно пройти: \n1. Вокзалов\n2. Автобусов\n>>";
             cin >> loc_choice;
             code = switch_move(station_head, curr_station, curr_bus);
-            if (code) return 666; // PrintMess
+            if (code) // Ошибка
+            {
+                PrintMess(code);
+                is_finished = 1;
+            }
             break;
         case 7:
             ptr_station = station_head;
@@ -411,7 +443,7 @@ int add_stations(Station*& head, Station*& end)
 
 int add_buses(Station* head, int id_station)
 {
-    int new_id; int max_id;
+    int new_id = 0; int max_id = 0;
     string name;
     Station* ptr = head;
     Station* station_ptr = findElemStation(id_station, head); // Вокзал, к которому будет относиться автобус
@@ -885,3 +917,17 @@ int switch_move(Station* s_head, Station*& curr_station, Bus*& curr_bus)
     } // switch
     return 0;
 } // switch_move
+
+//------ОСТАЛЬНЫЕ ФУНКЦИИ------//
+void PrintMess(int code)
+{
+    switch (code)
+    {
+    case 1: 
+        cout << "Неправильный тип данных!" << endl;
+        break;
+    case 4:
+        cout << "Элемента нету в этой БД!" << endl;
+        break;
+    }
+}
