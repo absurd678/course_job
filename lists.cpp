@@ -311,7 +311,7 @@ Station* move_in_stations(Station* curr_pos, int step) // Перемещение в прямом и
 }
 
 // Функции линейного ВОДИТЕЛЬ
-void make_driver(int id, string name, Driver*& end, Driver*& head) //  Добавление нового элемента
+int make_driver(int id, string name, Driver*& end, Driver*& head) //  Добавление нового элемента
 {
     if (find_driver(id, head)) return 3;
     else if (find_id_driver(name, head)) return 6;
@@ -403,8 +403,9 @@ void del_drivers(Driver*& head) // Удаление всего списка
 } // delList
 
 // Функции линейного РЕЙСЫ
-void make_route(Route* ptr, Route*& end, Route*& head) //  Добавление нового элемента
+int make_route(Route* ptr, Route*& end, Route*& head) //  Добавление нового элемента
 {
+    if (find_route_number(ptr->route_number, head)) return 5;
     if (!head) head = ptr; // Если это первый элемент
     else { end->next = ptr; } // У конца появилось продолжение
 

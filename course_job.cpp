@@ -79,11 +79,20 @@ int switch_move(Station* s_head, Station*& curr_station, Bus*& curr_bus);
 void PrintMess(int code); // Сообщение об ошибке
 
 //------ГЛОБАЛЬНЫЕ КОНСТАНТЫ------//
+// Некорректный тест №1
+//const char* fstations = "stations_incorr1.txt";
+//const char* fbuses = "buses.txt";
+//const char* fdrivers = "drivers.txt";
+//const char* froutes = "routes.txt";
 
+// Некорректный тест №2
 const char* fstations = "stations.txt";
-const char* fbuses = "buses.txt";
+const char* fbuses = "buses_incorr3.txt";
 const char* fdrivers = "drivers.txt";
 const char* froutes = "routes.txt";
+
+
+
 // Ширина столбцов для таблицы
 const int table_col = 17;
 
@@ -136,12 +145,41 @@ int main()
 
         case 0: // Выход
             // Создание БД, с которой собираемся работать
-            create_stations(fstations, station_head, station_end);
+            code = create_stations(fstations, station_head, station_end);
+            if (code)
+            {
+                PrintMess(code);
+                is_finished = 1;
+                break;
+            }
             curr_station = station_head; // Текущий вокзал - самый первый
-            create_buses(fbuses, station_head);
+
+            code = create_buses(fbuses, station_head);
+            if (code)
+            {
+                PrintMess(code);
+                is_finished = 1;
+                break;
+            }
             curr_bus = station_head->busHead; // Текущий автобус - самый первый в списке у первого вокзала
-            create_drivers(fdrivers, driver_head, driver_end);
-            create_routes(froutes, route_head, route_end);
+
+            code = create_drivers(fdrivers, driver_head, driver_end);
+            if (code)
+            {
+                PrintMess(code);
+                is_finished = 1;
+                break;
+            }
+
+            code = create_routes(froutes, route_head, route_end);
+            if (code)
+            {
+                PrintMess(code);
+                is_finished = 1;
+                break;
+            }
+
+            break;
 
         case 1:
             
@@ -259,7 +297,6 @@ int create_buses(const char* fname, Station* head)
     int id_bus; // айди автобуса
     string name; // Название марки
     int is_mistake = 0;
-
     Station* ptr = head;
 
     while (!fin.eof())
@@ -303,7 +340,7 @@ int create_buses(const char* fname, Station* head)
         is_mistake = makeBus(id, id_bus, name, bus_loc_end, bus_loc_head); // Добавляем автобус в вокзал
         if (is_mistake) return is_mistake; // DEBUG (уникальность имени марки в одном вокзале)
 
-         if (!ptr->busHead) ptr->busHead = bus_loc_head; // Добавление головы в поле
+        if (!ptr->busHead) ptr->busHead = bus_loc_head; // Добавление головы в поле
         ptr->busEnd = bus_loc_end; // Изменение поля конца списка
 
     } // while
@@ -315,6 +352,7 @@ int create_drivers(const char* fname, Driver*& head, Driver*& end) // Созда
     ifstream fin(fname);
     int id;
     string full_name; string name; string father_name; // ФИО
+    int is_mistake = 0;
 
     while (!fin.eof())
     {
@@ -346,13 +384,15 @@ int create_drivers(const char* fname, Driver*& head, Driver*& end) // Созда
         } // if
         full_name = full_name + " " + name + " " + father_name; // ФИО
 
-        make_driver(id, full_name, end, head); // Добавить в список
+        is_mistake = make_driver(id, full_name, end, head); // Добавить в список
+        if (is_mistake) return is_mistake;
     } // while
     fin.close();
 }
 
 int create_routes(const char* fname, Route*& head, Route*& end)
 {
+    int is_mistake = 0;
     ifstream fin(fname);
     
     while (!fin.eof())
@@ -361,60 +401,61 @@ int create_routes(const char* fname, Route*& head, Route*& end)
         fin >> RouteLoc->id_station;
         if (fin.fail())
         {
-            cout << "Некорректный id вокзала!" << endl;
-            return 0;
+            fin.close();
+            return 1;
         } // if
         
         fin >> RouteLoc->id_bus;
         if (fin.fail())
         {
-            cout << "Некорректный id автобуса!" << endl;
+            fin.close();
             return 1;
         } // if
         
         fin >> RouteLoc->id_driver;
         if (fin.fail())
         {
-            cout << "Некорректный id водителя!" << endl;
-            return 2;
+            fin.close();
+            return 1;
         } // if
 
         fin >> RouteLoc->route_number;
         if (fin.fail())
         {
-            cout << "Некорректный № рейса!" << endl;
-            return 3;
+            fin.close();
+            return 1;
         } // if
 
-        fin >> RouteLoc->time; // TODO: проверка формата
+        fin >> RouteLoc->time;
         if (fin.fail())
         {
-            cout << "Некорректная запись времени!" << endl;
-            return 4;
+            fin.close();
+            return 1;
         } // if
 
         fin >> RouteLoc->tickets;
         if (fin.fail())
         {
-            cout << "Некорректное число билетов!" << endl;
-            return 5;
+            fin.close();
+            return 1;
         } // if
 
         fin >> RouteLoc->passengers;
         if (fin.fail())
         {
-            cout << "Некорректное число пассажиров!" << endl;
-            return 6;
+            fin.close();
+            return 1;
         } // if
 
         fin >> RouteLoc->end_route;
         if (fin.fail())
         {
-            cout << "Некорректный пункт назначения!" << endl;
-            return 7;
+            fin.close();
+            return 1;
         } // if
 
-        make_route(RouteLoc, end, head);
+        is_mistake = make_route(RouteLoc, end, head);
+        if (is_mistake) return is_mistake;
 
     } // while
     fin.close();
@@ -456,8 +497,9 @@ int add_stations(Station*& head, Station*& end)
     id = max_station_id(head) + 1; // генерируем новый id
     cout << "Введите название вокзала: "; cin>>name;
     if (cin.fail()) {
-        return 2; // Некорректное имя
+        return 1; // Некорректное имя
     }
+    else if (find_id_station(name, head)) return 6; // Есть ли уже такой вокзал
     makeStation(id, name, end, head);
 
     return 0;
@@ -975,8 +1017,8 @@ void PrintMess(int code)
         cout << "Элемента нету в этой БД!" << endl;
         break;
     case 5:
-        /*cout << "Марки внутри одного вокзала не должны повторяться!" << endl;
-        break;*/
+        cout << "Номера рейсов не должны повторяться!" << endl;
+        break;
     case 6:
         cout << "Названия вокзалов, марок, ФИО водителей должны быть уникальными!" << endl;
         break;

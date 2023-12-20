@@ -72,7 +72,7 @@ int find_id_bus(string name, Bus* head); // Найти id по названию
 Bus* move_in_buses(Bus* curr_pos, int step); // Перемещение в прямом и обратном направлениях
 
 // Функции линейного ВОДИТЕЛЬ
-void make_driver(int id, string name, Driver*& end, Driver*& head); //  Добавление нового элемента
+int make_driver(int id, string name, Driver*& end, Driver*& head); //  Добавление нового элемента
 int max_driver_id(Driver* head); // Найти макс id
 void print_drivers(Driver* head);  // Печать всего списка
 Driver* find_driver(int id, Driver* head); // Найти элемент в списке по id
@@ -81,7 +81,7 @@ void delete_driver(Driver*& head, Driver*& end, int id); // Удаление элемента по
 void del_drivers(Driver*& head); // Удаление списка
 
 // Функции линейного РЕЙСЫ
-void make_route(Route* ptr, Route*& end, Route*& head); //  Добавление нового элемента
+int make_route(Route* ptr, Route*& end, Route*& head); //  Добавление нового элемента
 void print_routes(Route* head, Station* s_head, Driver* d_head);  // Печать всего списка
 Route* find_route_stationID(int id_station, Route* head); // Найти элемент в списке по полю id вокзала
 Route* find_route_busID(int id_bus, Route* head); // Найти элемент в списке по полю id автобуса
