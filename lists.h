@@ -91,5 +91,8 @@ Route* find_route_time_dep(string time_dep, Route* head);
 Route* find_route_tickets(int tickets, Route* head);
 Route* find_route_pass(int passengers, Route* head);
 Route* find_route_end(string end_route, Route* head);
+void print_stations_in_route(Route* r_head, Station* s_head); // Вывод всех вокзалов для удаления или поиска
+void print_buses_in_route(Route* r_head, Station* s_head); // Вывод всех вокзалов и автобусов для удаления или поиска
+void print_drivers_in_route(Route* r_head, Driver* d_head); // Вывод всех водителей для удаления или поиска
 void delete_route(Route*& head, Route*& end, int route_number); // Удаление элемента по номеру маршрута
 void del_routes(Route*& head); // Удаление списка

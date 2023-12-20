@@ -542,3 +542,41 @@ void del_routes(Route*& head) // Удаление всего списка
     } // while
     head = NULL;
 } // delList
+
+void print_stations_in_route(Route* r_head, Station* s_head)
+{
+    Station* s_ptr = s_head;
+    cout << "Все вокзалы с рейсами (выберете нужный): " << endl;
+    do
+    {
+        if (find_route_stationID(s_ptr->id, r_head))
+            cout << s_ptr->id << " " << s_ptr->name << endl;
+        s_ptr = s_ptr->next;
+    } while (s_ptr != s_head);
+}
+
+void print_buses_in_route(Route* r_head, Station* s_head)
+{
+    Route* r_ptr = r_head;
+    Station* temp;
+    cout << "Все вокзалы и автобусы с рейсами (выберете нужное): " << endl;
+    while (r_ptr)
+    {
+        temp = findElemStation(r_ptr->id_station, s_head);
+        cout << r_ptr->id_station << " (" << temp->name << ") "
+            << r_ptr->id_bus << " (" << findElemBus(r_ptr->id_bus, temp->busHead)->name << ")" << endl;
+        r_ptr = r_ptr->next;
+    }
+}
+
+void print_drivers_in_route(Route* r_head, Driver* d_head)
+{
+    Driver* d_ptr = d_head;
+    cout << "Все водители с рейсами (выберете нужный): " << endl;
+    while (d_ptr)
+    {
+        if (find_route_driverID(d_ptr->id, r_head))
+            cout << d_ptr->id << " " << d_ptr->name << endl;
+        d_ptr = d_ptr->next;
+    }
+}
