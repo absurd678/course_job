@@ -8,8 +8,9 @@ using namespace std;
  ***********************************************************************/
 
 // Функции кольцевого двухсвязного для марок
-void makeBus(int id, int id_bus, string name, Bus*& end, Bus*& head) //  Добавление нового элемента
+int makeBus(int id, int id_bus, string name, Bus*& end, Bus*& head) //  Добавление нового элемента
 {
+    if (find_id_bus(name, head)) return 6;
     Bus* ptr = new Bus;
 
     if (!head) head = ptr;
@@ -26,6 +27,7 @@ void makeBus(int id, int id_bus, string name, Bus*& end, Bus*& head) //  Добавле
     end = ptr;
     end->next = head;
     head->prev = end;
+    return 0;
 } // makeBus
 
 int max_bus_id(Bus* head) // Найти макс id
@@ -162,8 +164,10 @@ Bus* move_in_buses(Bus* curr_pos, int step) // Перемещение в прямом и обратном н
 //Bus* findElemBus(float a, Bus* head); // Найти элемент в списке
 
 // Функции двухсвязного списка для вокзалов
-void makeStation(int id, string name, Station*& end, Station*& head) //  Добавление нового элемента
+int makeStation(int id, string name, Station*& end, Station*& head) //  Добавление нового элемента
 {
+    if (find_id_station(name, head)) return 6; // Повтор вокзала
+    else if (findElemStation(id, head)->id == id) return 3; // Повтор id
     Station* ptr = new Station;
     
     if (!head) head = ptr;
@@ -179,6 +183,7 @@ void makeStation(int id, string name, Station*& end, Station*& head) //  Добавле
     end = ptr;
     end->next = head;
     head->prev = end;
+    return 0;
 }
 
 int max_station_id(Station* head) // Найти макс id
@@ -308,6 +313,8 @@ Station* move_in_stations(Station* curr_pos, int step) // Перемещение в прямом и
 // Функции линейного ВОДИТЕЛЬ
 void make_driver(int id, string name, Driver*& end, Driver*& head) //  Добавление нового элемента
 {
+    if (find_driver(id, head)) return 3;
+    else if (find_id_driver(name, head)) return 6;
     Driver* ptr = new Driver; // Новый элемент
     if (!head) head = ptr; // Если это первый элемент
     else { end->next = ptr; } // У конца появилось продолжение

@@ -50,7 +50,7 @@ struct Route { // Линейный (рейсы)
 }; 
 
 // Функции кольцевого двухсвязного для ВОКЗАЛОВ
-void makeStation(int id, string name, Station*& end, Station*& head); //  Добавление нового элемента
+int makeStation(int id, string name, Station*& end, Station*& head); //  Добавление нового элемента
 int max_station_id(Station* head); // Найти макс id
 void DeleteStation(Station*& head, Station*& end, int id); // Удаление элемента по его id
 void printStation(Station* head);  // Печать всего списка
@@ -61,7 +61,7 @@ int find_id_station(string name, Station* head); // Найти id по названию
 Station* move_in_stations(Station* curr_pos, int step); // Перемещение в прямом и обратном направлениях
 
 // Функции кольцевого двухсвязного для АВТОБУСОВ
-void makeBus(int id, int id_bus, string name, Bus*& end, Bus*& head); //  Добавление нового элемента
+int makeBus(int id, int id_bus, string name, Bus*& end, Bus*& head); //  Добавление нового элемента
 int max_bus_id(Bus* head); // Найти макс id
 void DeleteBus(Bus*& head, Bus*& end, int index); // Удаление элемента по его индексу
 void printBus(Bus* head, Station* s_head);  // Печать всего списка

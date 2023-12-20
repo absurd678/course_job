@@ -28,9 +28,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="stations.txt" />
-    <Text Include="buses.txt" />
-    <Text Include="routes.txt" />
-    <Text Include="drivers.txt" />
+    <Text Include="stations_incorr1.txt" />
+    <Text Include="buses_incorr1.txt" />
+    <Text Include="routes_incorr1.txt" />
+    <Text Include="drivers_incorr1.txt" />
   </ItemGroup>
 </Project>
