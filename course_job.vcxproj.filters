@@ -34,5 +34,7 @@
     <Text Include="drivers.txt" />
     <Text Include="stations.txt" />
     <Text Include="buses_incorr3.txt" />
+    <Text Include="routes_incorr5.txt" />
+    <Text Include="drivers_incorr6.txt" />
   </ItemGroup>
 </Project>

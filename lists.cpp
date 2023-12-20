@@ -10,7 +10,7 @@ using namespace std;
 // Функции кольцевого двухсвязного для марок
 int makeBus(int id, int id_bus, string name, Bus*& end, Bus*& head) //  Добавление нового элемента
 {
-    if (find_id_bus(name, head)) return 6;
+    if (find_id_bus(name, head) != -1) return 6;
     Bus* ptr = new Bus;
 
     if (!head) head = ptr;
@@ -167,7 +167,7 @@ Bus* move_in_buses(Bus* curr_pos, int step) // Перемещение в прямом и обратном н
 int makeStation(int id, string name, Station*& end, Station*& head) //  Добавление нового элемента
 {
     if (find_id_station(name, head)) return 6; // Повтор вокзала
-    else if (findElemStation(id, head)->id == id) return 3; // Повтор id
+    else if (findElemStation(id, head)) return 3; // Повтор id
     Station* ptr = new Station;
     
     if (!head) head = ptr;
@@ -277,6 +277,7 @@ void delListStation(Station*& head, Station*& end) // Удаление списка
 
 Station* findElemStation(int id, Station* head) // Найти элемент по id
 {
+    if (!head) return NULL;
     Station* ptr = head;
     do // Поиск по полю id
     {
@@ -288,6 +289,7 @@ Station* findElemStation(int id, Station* head) // Найти элемент по id
 
 int find_id_station(string name, Station* head)
 {
+    if (!head) return NULL;
     Station* ptr = head;
     do // Поиск по полю id
     {
@@ -325,6 +327,7 @@ int make_driver(int id, string name, Driver*& end, Driver*& head) //  Добавление
 
     end = ptr; // Делаем этот элемент последним
     ptr->next = NULL; // Следующих элементов списка нет
+    return 0;
 } // make
 
 int max_driver_id(Driver* head) // Найти макс id
@@ -411,6 +414,7 @@ int make_route(Route* ptr, Route*& end, Route*& head) //  Добавление нового элем
 
     end = ptr; // Делаем этот элемент последним
     ptr->next = NULL; // Следующих элементов списка нет
+    return 0;
 } // make
 
 // ПОИСК ПО РАЗНЫМ ПОЛЯМ
