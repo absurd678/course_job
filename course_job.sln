@@ -5,11 +5,6 @@ VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "course_job", "course_job.vcxproj", "{9DDBB8B4-017F-4A42-9D2E-90FC11134BFD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{B4363D95-53CC-48D2-8619-8398A179DB60}"
-	ProjectSection(SolutionItems) = preProject
-		..\course job documents\Оглавление.docx = ..\course job documents\Оглавление.docx
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
