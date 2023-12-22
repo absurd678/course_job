@@ -70,6 +70,7 @@ void delListBus(Bus*& head, Bus*& end); // Удаление списка
 Bus* findElemBus(int id, Bus* head); // Найти элемент в списке по id
 int find_id_bus(string name, Bus* head); // Найти id по названию
 Bus* move_in_buses(Bus* curr_pos, int step); // Перемещение в прямом и обратном направлениях
+void print_all_buses(Station* head); // Печать всех автобусов
 
 // Функции линейного ВОДИТЕЛЬ
 int make_driver(int id, string name, Driver*& end, Driver*& head); //  Добавление нового элемента

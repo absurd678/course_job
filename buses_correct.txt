@@ -1,0 +1,13 @@
+0 1 Mercedes
+0 2 Hyondai
+0 3 Лиаз
+0 4 Камаз
+1 5 Mercedes
+1 6 Hyondai
+1 7 Лиаз
+1 8 Ford
+2 9 Mercedes
+2 10 Hyondai
+2 11 Лиаз
+2 12 Камаз
+2 13 Ford

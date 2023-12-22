@@ -135,11 +135,15 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="buses.txt" />
+    <Text Include="buses_correct.txt" />
     <Text Include="buses_incorr3.txt" />
     <Text Include="drivers.txt" />
+    <Text Include="drivers_correct.txt" />
     <Text Include="drivers_incorr6.txt" />
     <Text Include="routes.txt" />
+    <Text Include="routes_correct.txt" />
     <Text Include="routes_incorr5.txt" />
+    <Text Include="stations_correct.txt" />
     <Text Include="stations_incorr1.txt" />
     <Text Include="stations.txt" />
   </ItemGroup>

@@ -20,25 +20,10 @@
 #include "lists.h"
 using namespace std;
 // TODO: 
-// Добить замечания Секретарева
-// Проверки (в первую очередь, уникальность значений полей)
-// Блок-схему мэйн со ссылками, чтобы влезла
-// 10 блок-схем
+// 
+// 10 блок-схем: ..., switch_search, switch_move, makeStation, DeleteStation, findStationElem, find_id_station, find_route_stationID
 // В добавлении указывать не по id, а по названиям, иначе ХРЕНЬ КАКАЯ-ТО
-// 
- // Проверки: 
- // Входных файлов:
- // Проверка на уникальность
- // Проверка на значения
- // Абсолютно у всех автобусов должны быть разные id?
- // Внутри одного и того же вокзала все автобусы имеют разные названия?
- // 
-// Все кейсы
-// 
-// 
-// формат времени
-// соответствие автобусов в рейсе и в списке марок
-// тоже самое для автовокзалов с автобусами
+ // ПАССАЖИРОВ Д Б МЕНЬШЕ ИЛИ РАВНО БИЛЕТАМ.
 
 
 /*********************************************************************
@@ -103,16 +88,22 @@ void PrintMess(int code); // Сообщение об ошибке
 //const char* fdrivers = "drivers_incorr6.txt";
 //const char* froutes = "routes.txt";
 
-// Некорректный тест №5
-const char* fstations = "stations.txt";
-const char* fbuses = "buses.txt";
-const char* fdrivers = "drivers.txt";
-const char* froutes = "routes.txt";
+// Некорректный тест №5-10
+//const char* fstations = "stations.txt";
+//const char* fbuses = "buses.txt";
+//const char* fdrivers = "drivers.txt";
+//const char* froutes = "routes.txt";
+
+// Корректный тест №1-10
+const char* fstations = "stations_correct.txt";
+const char* fbuses = "buses_correct.txt";
+const char* fdrivers = "drivers_correct.txt";
+const char* froutes = "routes_correct.txt";
 
 
 
 // Ширина столбцов для таблицы
-const int table_col = 17;
+const int table_col = 18;
 
 //------ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ------//
 
@@ -151,7 +142,7 @@ int main()
         cout << "0. Создать БД " << endl;
         cout << "1. Добавить элемент" << endl;
         cout << "2. Удалить элемент" << endl;
-        cout << "3. Настроить фильтр в таблице (поиск)" << endl;
+        cout << "3. Поиск в таблице рейсов" << endl;
         cout << "4. Печать списков" << endl;
         cout << "5. Печать таблицы" << endl; // Предусмотреть случаи добавления/удаления элементов
         cout << "6. Перемещение в прямом и обратном направлениях" << endl;
@@ -492,16 +483,16 @@ int switch_add(Station*& s_head, Station*& s_end, Driver*& d_head, Driver*& d_en
     switch (::loc_choice) // ГЛОБАЛЬНАЯ ПЕРЕМЕННАЯ
     {
     case 1:
-        print_stations_in_route(r_head, s_head); // Вывод всех вокзалов с рейсами
+        printStation(s_head); // Вывод всех вокзалов
         mistake_code = add_stations(s_head, s_end);
         break;
     case 2:
-        print_buses_in_route(r_head, s_head); // Вывод всех вокзалов и автобусов с рейсами
+        print_all_buses(s_head); // Вывод всех вокзалов и автобусов с рейсами
         cout << "Введите id станции, в которую вы хотите добавить автобус: "; cin >> id_station;
         mistake_code = add_buses(s_head, id_station);
         break;
     case 3:
-        print_drivers_in_route(r_head, d_head); // Вывод всех водителей с рейсами
+        print_drivers(d_head); // Вывод всех водителей с рейсами
         mistake_code = add_drivers(d_head, d_end);
         break;
     case 4:
@@ -565,14 +556,24 @@ int add_buses(Station* head, int id_station)
 int add_drivers(Driver*& head, Driver*& end)
 {
     int id; 
-    string name;
+    string name; string name1; string name2;
     int is_mistake = 0;
 
-    id = max_driver_id(head);
-    cout << "Введите ФИО водителя: "; cin >> name;
+    id = max_driver_id(head)+1;
+    cout << "Введите ФИО водителя: "; 
+    cin >> name;
     if (cin.fail()) {
         return 1; // Некорректное имя
-    } else 
+    }
+    cin >> name1;
+    if (cin.fail()) {
+        return 1; // Некорректное имя
+    }
+    cin >> name2;
+    if (cin.fail()) {
+        return 1; // Некорректное имя
+    }
+    name = name + " " + name1 + " " + name2;
     is_mistake = make_driver(id, name, end, head);
     if (is_mistake) return is_mistake;
 
@@ -634,20 +635,24 @@ int add_routes(Route*& head, Route*& end, Station* head_station, Driver* head_dr
 
 int switch_del(Station*& s_head, Station*& s_end, Driver*& d_head, Driver*& d_end, Route*& r_head, Route*& r_end)
 {
-
+    Station* ptr = s_head;
     int mistake_code = 0;
     switch (::loc_choice)
     {
     case 1:
-        print_stations_in_route(r_head, s_head); // Вывод всех вокзалов с рейсами
+        printStation(s_head); // Вывод всех вокзалов
         mistake_code = del_station(s_head, s_end, r_head, r_end);
         break;
     case 2:
-        print_buses_in_route(r_head, s_head); // Вывод всех вокзалов и автобусов с рейсами
+        do
+        {
+            printBus(ptr->busHead, s_head);
+            ptr = ptr->next;
+        } while (ptr != s_head); // Вывод всех вокзалов и автобусов
         mistake_code = del_bus(s_head, r_head, r_end);
         break;
     case 3:
-        print_drivers_in_route(r_head, d_head); // Вывод всех водителей с рейсами
+        print_drivers(d_head); // Вывод всех водителей с рейсами
         mistake_code = del_driver(d_head, d_end, r_head, r_end);
         break;
     case 4:
@@ -694,28 +699,30 @@ int del_station(Station*& head, Station*& end, Route*& route_head, Route*& route
 
 int del_bus(Station* head, Route*& route_head, Route*& route_end)
 {
-    int id_station; // ID вокзала
     int id; // ID автобуса
     string name_st;
     string name_bus;
-    Station* ptr; //  указатель на вокзал с этим автобусом 
+    Station* ptr; //  указатель на вокзал с этим автобусом
+    Route* r_ptr; // Рейс, в котором наверное есть автобус
 
     cout << "Введите название станции, из которой удалить автобус: "; cin >> name_st;
-    id_station = find_id_station(name_st, head);
-    if (!id) return 4; // Если такого вокзала нет
-
-    ptr = findElemStation(id_station, head);
+    ptr = findElemStation(find_id_station(name_st, head), head);
+    if (!ptr) return 4; // Если такого вокзала нет
     
-
     cout << "Введите название марки: "; cin >> name_bus;
     id = find_id_bus(name_bus, ptr->busHead);
     if (cin.fail()) {
         return 1; // Некорректный name
     }
-    else if (!findElemBus(id, ptr->busHead)) return 4; // Такого автобуса нет
+    else if (id==-1) return 4; // Такого автобуса нет
 
-    // Удаляем рейс, найдя указатель функцией поиска по полю id автобуса, по полю route_number
-    delete_route(route_head, route_end, find_route_busID(id, route_head)->route_number);
+    // Удаляем рейсы, найдя указатель функцией поиска по полю id автобуса, по полю route_number
+    r_ptr = find_route_busID(id, route_head);
+    while (r_ptr)
+    {
+        if (r_ptr) delete_route(route_head, route_end, r_ptr->route_number);
+        r_ptr = find_route_busID(id, route_head);
+    }
 
     // Удаляем, не забывая изменить поля
     Bus* bus_head = ptr->busHead;
@@ -924,12 +931,7 @@ void switch_print(Station*& s_head, Driver*& d_head, Route*& r_head)
         break;
     case 2: // Автобусов
         cout << "\nСПИСОК АВТОБУСОВ: " << endl;
-        station_ptr = s_head;
-        do // Проход по всем вокзалам
-        {
-            printBus(station_ptr->busHead, s_head);
-            station_ptr = station_ptr->next;
-        } while (station_ptr != s_head);
+        print_all_buses(s_head);
         break;
     case 3: // Водителей
         cout << "\nСПИСОК ВОДИТЕЛЕЙ: " << endl;
@@ -944,10 +946,7 @@ void switch_print(Station*& s_head, Driver*& d_head, Route*& r_head)
         printStation(s_head);
         station_ptr = s_head;
         cout << "\nСПИСОК АВТОБУСОВ: " << endl;
-        do // Проход по всем вокзалам
-        {
-            printBus(station_ptr->busHead, s_head);
-        } while (station_ptr != s_head);
+        print_all_buses(s_head);
         cout << "\nСПИСОК ВОДИТЕЛЕЙ: " << endl;
         print_drivers(d_head);
         cout << "\nСПИСОК МАРШРУТОВ: " << endl;

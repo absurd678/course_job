@@ -76,7 +76,7 @@ void printBus(Bus* head, Station* s_head)  // Печать всего списка
     if (ptr) cout <<" "<<findElemStation(ptr->id, s_head)->name << " " << ptr->name << endl;
     else
     {
-        cout << "Список пуст!" << endl;
+        //cout << "Список пуст!" << endl;
         return;
     } // else
     ptr = ptr->next;
@@ -160,6 +160,15 @@ Bus* move_in_buses(Bus* curr_pos, int step) // Перемещение в прямом и обратном н
     return curr_pos;
 }
 
+void print_all_buses(Station* head)
+{
+    Station* ptr = head;
+    do
+    {
+        printBus(ptr->busHead, head);
+        ptr = ptr->next;
+    } while (ptr != head);
+}
 
 //Bus* findElemBus(float a, Bus* head); // Найти элемент в списке
 
