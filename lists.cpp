@@ -79,6 +79,7 @@ void printBus(Bus* head, Station* s_head)  // Печать всего списка
         //cout << "Список пуст!" << endl;
         return;
     } // else
+    
     ptr = ptr->next;
     while (ptr != head)
     {
@@ -162,6 +163,7 @@ Bus* move_in_buses(Bus* curr_pos, int step) // Перемещение в прямом и обратном н
 
 void print_all_buses(Station* head)
 {
+    cout << "ВСЕ АВТОБУСЫ В БАЗЕ ДАННЫХ" << endl;
     Station* ptr = head;
     do
     {
@@ -175,7 +177,7 @@ void print_all_buses(Station* head)
 // Функции двухсвязного списка для вокзалов
 int makeStation(int id, string name, Station*& end, Station*& head) //  Добавление нового элемента
 {
-    if (find_id_station(name, head)) return 6; // Повтор вокзала
+    if (find_id_station(name, head) != -1) return 6; // Повтор вокзала
     else if (findElemStation(id, head)) return 3; // Повтор id
     Station* ptr = new Station;
     
@@ -238,12 +240,13 @@ void DeleteStation(Station*& head, Station*& end, int id) // Удаление элемента п
 void printStation(Station* head)  // Печать всего списка
 {
     Station* ptr = head;
-    if (ptr) cout << ptr->name << endl;
-    else
-    {
-        cout << "Список пуст!" << endl;
+    if (!ptr) {
+        cout << "Список вокзалов пуст!" << endl;
         return;
-    } // else
+    }
+  
+    cout << "СПИСОК ВОКЗАЛОВ" << endl;
+    cout << " " << ptr->name << endl;
     ptr = ptr->next;
     while (ptr != head)
     {
@@ -298,14 +301,14 @@ Station* findElemStation(int id, Station* head) // Найти элемент по id
 
 int find_id_station(string name, Station* head)
 {
-    if (!head) return NULL;
+    if (!head) return -1;
     Station* ptr = head;
     do // Поиск по полю id
     {
         if (ptr->name == name) return ptr->id;
         ptr = ptr->next;
     } while (ptr != head);
-    return NULL;
+    return -1;
 } // find_id_station
 
 Station* move_in_stations(Station* curr_pos, int step) // Перемещение в прямом и обратном направлениях
@@ -353,6 +356,7 @@ int max_driver_id(Driver* head) // Найти макс id
 
 void print_drivers(Driver* head)  // Печать всего списка
 {
+    cout << "СПИСОК ВОДИТЕЛЕЙ" << endl;
     Driver* ptr = head;
     if (!ptr) cout << "Список пуст" << endl;
     while (ptr)
@@ -567,7 +571,7 @@ void del_routes(Route*& head) // Удаление всего списка
 void print_stations_in_route(Route* r_head, Station* s_head)
 {
     Station* s_ptr = s_head;
-    cout << "Все вокзалы с рейсами (выберете нужный): " << endl;
+    cout << "Все вокзалы с рейсами: " << endl;
     do
     {
         if (find_route_stationID(s_ptr->id, r_head))
@@ -580,7 +584,7 @@ void print_buses_in_route(Route* r_head, Station* s_head)
 {
     Route* r_ptr = r_head;
     Station* temp;
-    cout << "Все вокзалы и автобусы с рейсами (выберете нужное): " << endl;
+    cout << "Все вокзалы и автобусы с рейсами: " << endl;
     while (r_ptr)
     {
         temp = findElemStation(r_ptr->id_station, s_head);
@@ -593,7 +597,7 @@ void print_buses_in_route(Route* r_head, Station* s_head)
 void print_drivers_in_route(Route* r_head, Driver* d_head)
 {
     Driver* d_ptr = d_head;
-    cout << "Все водители с рейсами (выберете нужный): " << endl;
+    cout << "Все водители с рейсами: " << endl;
     while (d_ptr)
     {
         if (find_route_driverID(d_ptr->id, r_head))
