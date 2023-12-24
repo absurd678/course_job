@@ -21,7 +21,9 @@
 using namespace std;
 // TODO: 
 // 
-// 10 блок-схем: ..., switch_search, switch_move, makeStation, DeleteStation, findStationElem, find_id_station, find_route_stationID
+// 10 блок-схем: ..., find_route_stationID
+// Описание структур
+// Обзор интерфейса
 // В добавлении указывать не по id, а по названиям, иначе ХРЕНЬ КАКАЯ-ТО
  // ПАССАЖИРОВ Д Б МЕНЬШЕ ИЛИ РАВНО БИЛЕТАМ.
 
@@ -644,11 +646,7 @@ int switch_del(Station*& s_head, Station*& s_end, Driver*& d_head, Driver*& d_en
         mistake_code = del_station(s_head, s_end, r_head, r_end);
         break;
     case 2:
-        do
-        {
-            printBus(ptr->busHead, s_head);
-            ptr = ptr->next;
-        } while (ptr != s_head); // Вывод всех вокзалов и автобусов
+        print_all_buses(s_head);  // Вывод всех вокзалов и автобусов
         mistake_code = del_bus(s_head, r_head, r_end);
         break;
     case 3:
