@@ -86,16 +86,16 @@ void PrintMess(int code); // Сообщение об ошибке
 //const char* froutes = "routes.txt";
 
 // Некорректный тест №5-10
-const char* fstations = "stations.txt";
-const char* fbuses = "buses.txt";
-const char* fdrivers = "drivers.txt";
-const char* froutes = "routes.txt";
+//const char* fstations = "stations.txt";
+//const char* fbuses = "buses.txt";
+//const char* fdrivers = "drivers.txt";
+//const char* froutes = "routes.txt";
 
 // Корректный тест №1-10
-//const char* fstations = "stations_correct.txt";
-//const char* fbuses = "buses_correct.txt";
-//const char* fdrivers = "drivers_correct.txt";
-//const char* froutes = "routes_correct.txt";
+const char* fstations = "stations_correct.txt";
+const char* fbuses = "buses_correct.txt";
+const char* fdrivers = "drivers_correct.txt";
+const char* froutes = "routes_correct.txt";
 
 
 
@@ -372,6 +372,7 @@ int create_drivers(const char* fname, Driver*& head, Driver*& end) // Созда
             return 1;
         } // if
         full_name = full_name + " " + name + " " + father_name; // ФИО
+        //getline(fin, full_name);
 
         is_mistake = make_driver(id, full_name, end, head); // Добавить в список
         if (is_mistake) return is_mistake;
@@ -517,7 +518,7 @@ int add_buses(Station* head)
     if (cin.fail()) {
         return 1; // Некорректное имя
     }
-    station_ptr = findElemStation(find_id_station(name_bus, head), head);
+    station_ptr = findElemStation(find_id_station(name_station, head), head);
     if (!station_ptr) return 4; // Не найдена станция
 
     cout << "\nВведите название марки: \n>>"; cin >> name_bus;
@@ -833,9 +834,9 @@ int switch_search(Route* route_head, Station* st_head, Driver* dr_head)
     
     case 3:
         print_drivers_in_route(route_head, dr_head); // Все водители в рейсах
-        cout << "Введите ФИО водителя, рейсы которого нужно вывести: \n>>"; cin >> str_filter;
+        cout << "Введите ФИО водителя, рейсы которого нужно вывести: \n>>"; getline(cin, str_filter);
         if (cin.fail()) return 1;
-        else if (!find_id_driver(str_filter, dr_head)) return 4; // Если такого вокзала просто нет
+        else if (find_id_driver(str_filter, dr_head)==-1) return 4; // Если такого водителя просто нет
 
         id = find_id_driver(str_filter, dr_head);
         found = find_route_driverID(id, route_head);

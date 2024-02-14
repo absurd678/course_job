@@ -328,7 +328,7 @@ Station* move_in_stations(Station* curr_pos, int step) // Перемещение в прямом и
 int make_driver(int id, string name, Driver*& end, Driver*& head) //  Добавление нового элемента
 {
     if (find_driver(id, head)) return 3;
-    else if (find_id_driver(name, head)) return 6;
+    else if (find_id_driver(name, head)!=-1) return 6;
     Driver* ptr = new Driver; // Новый элемент
     if (!head) head = ptr; // Если это первый элемент
     else { end->next = ptr; } // У конца появилось продолжение
@@ -386,7 +386,7 @@ int find_id_driver(string name, Driver* head) // Найти id по названию
         if (ptr->name == name) return ptr->id;
         ptr = ptr->next;
     }
-    return NULL;
+    return -1;
 }
 
 void delete_driver(Driver*& head, Driver*& end, int id) { // Удаление элемента по id
